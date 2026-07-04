@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diseño Instruccional Paso a Paso</title>
+<style>
+  :root{
+    --navy:#1E2A4A;
+    --navy-light:#2E3D63;
+    --gold:#C79A3E;
+    --gold-light:#F3E6C8;
+    --bg:#F6F5F1;
+    --card:#FFFFFF;
+    --text:#20242E;
+    --text-muted:#5B6272;
+    --border:#DDDBD3;
+    --danger:#B3432B;
+    --success:#3B6D4E;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Segoe UI', Calibri, Arial, sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.5;
+  }
+  header{
+    background:var(--navy);
+    color:#fff;
+    padding:1.5rem 2rem;
+  }
+  header h1{
+    margin:0 0 0.2rem;
+    font-size:1.4rem;
+    font-weight:600;
+  }
+  header p{
+    margin:0;
+    color:#C9CEDC;
+    font-size:0.9rem;
+  }
+  .toolbar{
+    display:flex;
+    gap:0.6rem;
+    padding:0.8rem 2rem;
+    background:var(--navy-light);
+    flex-wrap:wrap;
+  }
+  .toolbar button{
+    background:transparent;
+    color:#fff;
+    border:1px solid rgba(255,255,255,0.35);
+    padding:0.45rem 0.9rem;
+    border-radius:var(--radius);
+    cursor:pointer;
+    font-size:0.85rem;
+  }
+  .toolbar button:hover{ background:rgba(255,255,255,0.12); }
+  #save-status{
+    color:var(--gold-light);
+    font-size:0.8rem;
+    align-self:center;
+    margin-left:auto;
+  }
+  .progress-wrap{
+    padding:1rem 2rem 0.5rem;
+    background:var(--card);
+    border-bottom:1px solid var(--border);
+  }
+  .progress-bar{
+    height:6px;
+    background:var(--border);
+    border-radius:4px;
+    overflow:hidden;
+    margin-bottom:0.5rem;
+  }
+  .progress-fill{
+    height:100%;
+    background:var(--gold);
+    width:0%;
+    transition:width 0.3s ease;
+  }
+  .progress-label{
+    font-size:0.8rem;
+    color:var(--text-muted);
+  }
+  main{
+    max-width:900px;
+    margin:0 auto;
+    padding:2rem;
+  }
+  .step{ display:none; animation:fade 0.25s ease; }
+  .step.active{ display:block; }
+  @keyframes fade{ from{opacity:0;} to{opacity:1;} }
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:1.75rem;
+  }
+  .step h2{
+    margin-top:0;
+    font-size:1.25rem;
+    color:var(--navy);
+  }
+  .step .hint{
+    color:var(--text-muted);
+    font-size:0.88rem;
+    margin-top:-0.5rem;
+    margin-bottom:1.2rem;
+  }
+  label{
+    display:block;
+    font-size:0.85rem;
+    font-weight:600;
+    color:var(--navy);
+    margin:1rem 0 0.35rem;
+  }
+  label:first-of-type{ margin-top:0; }
+  input[type="text"], input[type="number"], select, textarea{
+    width:100%;
+    padding:0.6rem 0.7rem;
+    border:1px solid var(--border);
+    border-radius:8px;
+    font-size:0.95rem;
+    font-family:inherit;
+    background:#fff;
+    color:var(--text);
+  }
+  textarea{ resize:vertical; min-height:70px; }
+  input:focus, select:focus, textarea:focus{
+    outline:none;
+    border-color:var(--gold);
+    box-shadow:0 0 0 3px var(--gold-light);
+  }
+  .fieldset-title{
+    font-weight:600;
+    color:var(--navy);
+    margin-top:1.4rem;
+    padding-top:1rem;
+    border-top:1px solid var(--border);
+  }
+  .fieldset-title:first-child{ border-top:none; padding-top:0; margin-top:0; }
+  .checkbox-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:0.6rem;
+    margin-top:0.5rem;
+  }
+  .checkbox-row{
+    display:flex;
+    align-items:flex-start;
+    gap:0.5rem;
+    padding:0.5rem 0.7rem;
+    border:1px solid var(--border);
+    border-radius:8px;
+    margin:0;
+    font-weight:400;
+    color:var(--text);
+    min-height:44px;
+  }
+  .checkbox-row input{ width:auto; }
+  input[type="checkbox"]{
+    width:18px;
+    height:18px;
+    min-width:18px;
+    flex-shrink:0;
+    accent-color:var(--navy);
+    margin:2px 0 0;
+    cursor:pointer;
+  }
+  .radio-cards{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:0.7rem;
+    margin-top:0.5rem;
+  }
+  .radio-card{
+    border:1.5px solid var(--border);
+    border-radius:10px;
+    padding:0.9rem;
+    height:64px;
+    margin:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    cursor:pointer;
+    font-weight:600;
+    color:var(--text-muted);
+  }
+  @media(max-width:640px){
+    .radio-cards{ grid-template-columns:repeat(2, 1fr); }
+  }
+  .radio-card.selected{
+    border-color:var(--gold);
+    background:var(--gold-light);
+    color:var(--navy);
+  }
+  .radio-card input{ display:none; }
+  .list-item{
+    display:flex;
+    align-items:center;
+    gap:0.5rem;
+    padding:0.5rem 0.7rem;
+    border:1px solid var(--border);
+    border-radius:8px;
+    margin-bottom:0.4rem;
+  }
+  .list-item span{ flex:1; font-size:0.9rem; }
+  .btn-small{
+    background:none;
+    border:1px solid var(--border);
+    border-radius:6px;
+    color:var(--danger);
+    cursor:pointer;
+    padding:0.2rem 0.55rem;
+    font-size:0.8rem;
+  }
+  .add-row{
+    display:flex;
+    gap:0.5rem;
+    margin-top:0.6rem;
+  }
+  .add-row input{ flex:1; }
+  .btn-secondary{
+    background:var(--navy);
+    color:#fff;
+    border:none;
+    border-radius:8px;
+    padding:0.6rem 1rem;
+    cursor:pointer;
+    font-size:0.9rem;
+    white-space:nowrap;
+  }
+  .btn-secondary:hover{ background:var(--navy-light); }
+  table.sesiones{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:0.8rem;
+    font-size:0.85rem;
+  }
+  table.sesiones th{
+    background:var(--navy);
+    color:#fff;
+    padding:0.5rem;
+    text-align:left;
+    font-weight:600;
+  }
+  table.sesiones td{
+    border:1px solid var(--border);
+    padding:0.4rem;
+    vertical-align:top;
+  }
+  table.sesiones input, table.sesiones select, table.sesiones textarea{
+    font-size:0.82rem;
+    padding:0.35rem;
+    min-height:40px;
+  }
+  .nav-buttons{
+    display:flex;
+    justify-content:space-between;
+    margin-top:1.5rem;
+    gap:1rem;
+  }
+  .btn-primary{
+    background:var(--gold);
+    color:var(--navy);
+    border:none;
+    border-radius:8px;
+    padding:0.7rem 1.4rem;
+    cursor:pointer;
+    font-weight:600;
+    font-size:0.95rem;
+  }
+  .btn-primary:hover{ background:#B58A2E; }
+  .btn-ghost{
+    background:none;
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:0.7rem 1.4rem;
+    cursor:pointer;
+    font-size:0.95rem;
+    color:var(--text-muted);
+  }
+  .btn-ghost:disabled{ opacity:0.4; cursor:default; }
+  .review-block{
+    border-bottom:1px solid var(--border);
+    padding:0.8rem 0;
+  }
+  .review-block:last-child{ border-bottom:none; }
+  .review-block h3{
+    margin:0 0 0.3rem;
+    font-size:0.95rem;
+    color:var(--navy);
+  }
+  .review-block p, .review-block li{
+    font-size:0.88rem;
+    color:var(--text);
+    margin:0.15rem 0;
+  }
+  .note{
+    background:var(--gold-light);
+    border:1px solid #E4CE94;
+    border-radius:8px;
+    padding:0.8rem 1rem;
+    font-size:0.85rem;
+    color:#6B5220;
+    margin-bottom:1rem;
+  }
+  @media(max-width:640px){
+    header, .toolbar, .progress-wrap, main{ padding-left:1rem; padding-right:1rem; }
+    .nav-buttons{ flex-direction:column-reverse; }
+    .nav-buttons button{ width:100%; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Diseño instruccional paso a paso</h1>
+  <p>Este documento es tu hoja de ruta. Su propósito es guiarte en la planificación estructurada de la materia para asegurar la "alineación constructiva"; es decir, garantizar que los objetivos de aprendizaje, las metodologías de enseñanza, los recursos y los métodos de evaluación estén en perfecta sintonía. Al completar esta plantilla, tendrás el esqueleto completo de tu curso listo para ser implementado.</p>
+</header>
+
+<div class="toolbar">
+  <button id="btn-save">Guardar avance</button>
+  <button id="btn-load">Cargar avance</button>
+  <input type="file" id="file-input" accept="application/json,.json" style="display:none;">
+  <button id="btn-reset">Empezar de nuevo</button>
+  <span id="save-status"></span>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+  <div class="progress-label" id="progress-label">Paso 1 de 12</div>
+</div>
+
+<main>
+  <div class="card">
+
+    <!-- STEP 1 -->
+    <div class="step active" data-step="1">
+      <h2>1. Tu nombre</h2>
+      <p class="hint">Para identificar el documento final.</p>
+      <label for="nombre">Nombre completo</label>
+      <input type="text" id="nombre" placeholder="Ej. María Fernanda Gutiérrez">
+      <p id="nombre-warning" style="display:none; color:var(--danger); font-size:0.85rem; margin-top:0.4rem;">Indica tu nombre completo antes de continuar.</p>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step" data-step="2">
+      <h2>2. Materia</h2>
+      <p class="hint">La asignatura o curso donde aplicarás este diseño.</p>
+      <label for="materia">Nombre de la materia</label>
+      <input type="text" id="materia" placeholder="Ej. Gestión de proyectos">
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step" data-step="3">
+      <h2>3. Tema</h2>
+      <p class="hint">El tema puntual que trabajarás en este diseño instruccional.</p>
+      <label for="tema">Nombre del tema</label>
+      <input type="text" id="tema" placeholder="Ej. Gestión de riesgos">
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step" data-step="4">
+      <h2>4. Modalidad de la materia</h2>
+      <p class="hint">Selecciona una opción.</p>
+      <div class="radio-cards" id="modalidad-cards">
+        <label class="radio-card" data-value="Presencial"><input type="radio" name="modalidad" value="Presencial">Presencial</label>
+        <label class="radio-card" data-value="Virtual"><input type="radio" name="modalidad" value="Virtual">Virtual</label>
+        <label class="radio-card" data-value="Híbrida"><input type="radio" name="modalidad" value="Híbrida">Híbrida</label>
+        <label class="radio-card" data-value="Blended"><input type="radio" name="modalidad" value="Blended">Blended</label>
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step" data-step="5">
+      <h2>5. Características del aula</h2>
+      <p class="hint">Indica la capacidad, marca lo que aplique y agrega notas adicionales si lo necesitas.</p>
+      <label for="aula-capacidad">Capacidad aproximada de estudiantes</label>
+      <input type="number" id="aula-capacidad" min="0" placeholder="Ej. 30">
+      <label style="margin-top:1.2rem;">Elementos disponibles en el aula</label>
+      <div class="checkbox-grid" style="margin-top:0.5rem;">
+        <label class="checkbox-row"><input type="checkbox" id="aula-proyector"> Proyector</label>
+        <label class="checkbox-row"><input type="checkbox" id="aula-pantalla-tv"> Pantalla de tele</label>
+        <label class="checkbox-row"><input type="checkbox" id="aula-pantalla-interactiva"> Pantalla interactiva</label>
+        <label class="checkbox-row"><input type="checkbox" id="aula-camara"> Cámara</label>
+        <label class="checkbox-row"><input type="checkbox" id="aula-microfono"> Micrófono de solapa</label>
+        <label class="checkbox-row"><input type="checkbox" id="aula-atril"> Atril</label>
+        <label class="checkbox-row"><input type="checkbox" id="aula-kit"> Kit de herramientas (post-its, papelógrafos, rotuladores)</label>
+        <label class="checkbox-row"><input type="checkbox" id="aula-internet"> Conexión a internet</label>
+        <label class="checkbox-row"><input type="checkbox" id="aula-parlantes"> Parlantes</label>
+        <label class="checkbox-row"><input type="checkbox" id="aula-computadoras"> Computadoras</label>
+        <label class="checkbox-row"><input type="checkbox" id="aula-pizarra"> Pizarra</label>
+      </div>
+      <label style="margin-top:1.2rem;">Otras características relevantes</label>
+      <div class="add-row">
+        <input type="text" id="aula-otro-input" placeholder="Ej. Aula con acústica limitada">
+        <button class="btn-secondary" id="btn-add-aula-otro">Agregar</button>
+      </div>
+      <div id="aula-otros-lista" style="margin-top:1rem;"></div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div class="step" data-step="6">
+      <h2>6. Perfil de los estudiantes</h2>
+      <p class="hint">Describe a tu grupo lo más específicamente posible.</p>
+
+      <label for="perfil-edades">Rango de edades</label>
+      <input type="text" id="perfil-edades" placeholder="Ej. 19 a 23 años">
+
+      <label for="perfil-genero">Datos de género</label>
+      <input type="text" id="perfil-genero" placeholder="Ej. Grupo mixto, 60% mujeres / 40% hombres">
+
+      <label for="perfil-socioeconomico">Contexto socioeconómico</label>
+      <textarea id="perfil-socioeconomico" placeholder="Ej. Estudiantes en su mayoría trabajadores de tiempo parcial, clase media"></textarea>
+
+      <label for="perfil-tecnologia">Grado de acceso a la tecnología</label>
+      <select id="perfil-tecnologia">
+        <option value="">Selecciona una opción</option>
+        <option value="Nulo">Nulo</option>
+        <option value="Bajo">Bajo</option>
+        <option value="Medio">Medio</option>
+        <option value="Alto">Alto</option>
+      </select>
+
+      <label for="perfil-conocimientos">Conocimientos previos</label>
+      <textarea id="perfil-conocimientos" placeholder="Ej. Ya cursaron fundamentos de gestión de proyectos"></textarea>
+
+      <label for="perfil-personalidad">Personalidad del grupo</label>
+      <textarea id="perfil-personalidad" placeholder="Ej. Grupo participativo, competitivo, prefieren trabajo práctico sobre teoría"></textarea>
+    </div>
+
+    <!-- STEP 7 -->
+    <div class="step" data-step="7">
+      <h2>7. Recursos disponibles</h2>
+      <p class="hint">Agrega uno por uno (licencias de software, plataformas, libros, laboratorios, etc.).</p>
+      <div class="add-row">
+        <input type="text" id="recurso-input" placeholder="Ej. Licencia de Moodle institucional">
+        <button class="btn-secondary" id="btn-add-recurso">Agregar</button>
+      </div>
+      <div id="recursos-lista" style="margin-top:1rem;"></div>
+    </div>
+
+    <!-- STEP 8 -->
+    <div class="step" data-step="8">
+      <h2>8. Objetivo del tema (Taxonomía de Bloom)</h2>
+      <p class="hint">Elige el nivel cognitivo principal y redacta el objetivo.</p>
+      <label for="bloom-nivel">Nivel de la Taxonomía de Bloom (revisada 2001)</label>
+      <select id="bloom-nivel">
+        <option value="">Selecciona un nivel</option>
+        <option value="Recordar">Recordar</option>
+        <option value="Comprender">Comprender</option>
+        <option value="Aplicar">Aplicar</option>
+        <option value="Analizar">Analizar</option>
+        <option value="Evaluar">Evaluar</option>
+        <option value="Crear">Crear</option>
+      </select>
+      <label for="objetivo">Redacción del objetivo</label>
+      <textarea id="objetivo" placeholder="Ej. El estudiante será capaz de diseñar un plan integral de gestión de riesgos para proyectos de software..."></textarea>
+    </div>
+
+    <!-- STEP 9 -->
+    <div class="step" data-step="9">
+      <h2>9. Desglose del objetivo</h2>
+      <p class="hint">Agrega una fila por cada elemento, indicando el tipo y el contenido correspondiente.</p>
+      <div style="overflow-x:auto;">
+        <table class="sesiones" id="tabla-desglose">
+          <thead>
+            <tr>
+              <th style="width:22%;">Tipo</th>
+              <th style="width:70%;">Contenido</th>
+              <th style="width:8%;"></th>
+            </tr>
+          </thead>
+          <tbody id="desglose-tbody"></tbody>
+        </table>
+      </div>
+      <button class="btn-secondary" id="btn-add-desglose" style="margin-top:0.8rem;">+ Agregar elemento</button>
+    </div>
+
+    <!-- STEP 10 -->
+    <div class="step" data-step="10">
+      <h2>10. Estrategias didácticas</h2>
+      <p class="hint">Selecciona todas las que planeas utilizar.</p>
+      <div class="checkbox-grid" id="estrategias-grid">
+        <label class="checkbox-row"><input type="checkbox" value="Aprendizaje basado en problemas"> Aprendizaje basado en problemas</label>
+        <label class="checkbox-row"><input type="checkbox" value="Aprendizaje basado en simulación"> Aprendizaje basado en simulación</label>
+        <label class="checkbox-row"><input type="checkbox" value="Aprendizaje basado en proyectos"> Aprendizaje basado en proyectos</label>
+        <label class="checkbox-row"><input type="checkbox" value="Caso de estudio"> Caso de estudio</label>
+        <label class="checkbox-row"><input type="checkbox" value="Juego de roles"> Juego de roles</label>
+        <label class="checkbox-row"><input type="checkbox" value="Exposición magistral"> Exposición magistral</label>
+        <label class="checkbox-row"><input type="checkbox" value="Exposición demostrativa"> Exposición demostrativa</label>
+        <label class="checkbox-row"><input type="checkbox" value="Preguntas dirigidas"> Preguntas dirigidas</label>
+        <label class="checkbox-row"><input type="checkbox" value="Debate"> Debate</label>
+      </div>
+      <label style="margin-top:1.2rem;">Otras estrategias</label>
+      <div class="add-row">
+        <input type="text" id="estrategia-otra-input" placeholder="Ej. Aprendizaje invertido">
+        <button class="btn-secondary" id="btn-add-estrategia-otra">Agregar</button>
+      </div>
+      <div id="estrategias-otras-lista" style="margin-top:1rem;"></div>
+    </div>
+
+    <!-- STEP 11 -->
+    <div class="step" data-step="11">
+      <h2>11. Cronograma de sesiones</h2>
+      <p class="hint">Agrega una fila por cada actividad de tu curso.</p>
+      <div style="overflow-x:auto;">
+        <table class="sesiones" id="tabla-sesiones">
+          <thead>
+            <tr>
+              <th style="width:6%;">Sesión</th>
+              <th style="width:12%;">Tipo</th>
+              <th style="width:12%;">Temporalidad</th>
+              <th style="width:10%;">Duración</th>
+              <th style="width:34%;">Actividades / estrategias</th>
+              <th style="width:20%;">Etapa del ciclo de aprendizaje</th>
+              <th style="width:6%;"></th>
+            </tr>
+          </thead>
+          <tbody id="sesiones-tbody"></tbody>
+        </table>
+      </div>
+      <button class="btn-secondary" id="btn-add-sesion" style="margin-top:0.8rem;">+ Agregar actividad</button>
+    </div>
+
+    <!-- STEP 12: REVIEW -->
+    <div class="step" data-step="12">
+      <h2>12. Revisión final</h2>
+      <p class="hint">Verifica tu diseño instruccional antes de generar el PDF.</p>
+      <div class="note">Puedes volver a cualquier paso anterior para hacer ajustes antes de generar el documento final.</div>
+      <div id="review-container"></div>
+      <div id="pdf-status" style="display:none; margin-top:1rem; padding:0.7rem 1rem; border-radius:8px; font-size:0.88rem;"></div>
+      <div style="display:flex; gap:0.7rem; margin-top:1.2rem;">
+        <button class="btn-ghost" id="btn-preview-pdf" style="flex:1;">Vista previa del PDF</button>
+        <button class="btn-primary" id="btn-generate-pdf" style="flex:1;">Descargar PDF</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="nav-buttons">
+    <button class="btn-ghost" id="btn-prev">Anterior</button>
+    <button class="btn-primary" id="btn-next">Siguiente</button>
+  </div>
+</main>
+
+<div id="pdf-modal" style="display:none; position:fixed; inset:0; background:rgba(20,24,32,0.65); z-index:1000; align-items:center; justify-content:center;">
+  <div style="background:#fff; width:92%; max-width:900px; height:88vh; border-radius:12px; display:flex; flex-direction:column; overflow:hidden;">
+    <div style="display:flex; justify-content:space-between; align-items:center; padding:0.8rem 1.2rem; border-bottom:1px solid var(--border);">
+      <strong style="color:var(--navy);">Vista previa del PDF</strong>
+      <div style="display:flex; gap:0.5rem;">
+        <button class="btn-secondary" id="btn-download-from-preview">Descargar</button>
+        <button class="btn-ghost" id="btn-close-preview">Cerrar</button>
+      </div>
+    </div>
+    <iframe id="pdf-preview-frame" style="flex:1; border:none; width:100%;"></iframe>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+<script>
+const TOTAL_STEPS = 12;
+let currentStep = 1;
+let recursos = [];
+let aulaOtros = [];
+let estrategiasOtras = [];
+let sesionCounter = 0;
+let desgloseCounter = 0;
+
+function $(id){ return document.getElementById(id); }
+
+/* ---------- Navegación ---------- */
+function goToStep(n){
+  if(n < 1 || n > TOTAL_STEPS) return;
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.querySelector('.step[data-step="'+n+'"]').classList.add('active');
+  currentStep = n;
+  $('progress-fill').style.width = Math.round((n/TOTAL_STEPS)*100) + '%';
+  $('progress-label').textContent = 'Paso ' + n + ' de ' + TOTAL_STEPS;
+  $('btn-prev').disabled = (n === 1);
+  $('btn-next').style.display = (n === TOTAL_STEPS) ? 'none' : 'inline-block';
+  if(n === TOTAL_STEPS){ renderReview(); }
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+$('btn-next').addEventListener('click', () => {
+  if(currentStep === 1 && !$('nombre').value.trim()){
+    $('nombre-warning').style.display = 'block';
+    $('nombre').focus();
+    return;
+  }
+  $('nombre-warning').style.display = 'none';
+  goToStep(currentStep + 1);
+});
+$('btn-prev').addEventListener('click', () => goToStep(currentStep - 1));
+
+/* ---------- Radio cards (modalidad) ---------- */
+document.querySelectorAll('#modalidad-cards .radio-card').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('#modalidad-cards .radio-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    card.querySelector('input').checked = true;
+  });
+});
+
+/* ---------- Listas dinámicas simples (recursos, otras características del aula, otras estrategias) ---------- */
+function renderSimpleList(containerId, list){
+  const cont = $(containerId);
+  cont.innerHTML = '';
+  list.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'list-item';
+    div.innerHTML = '<span></span><button class="btn-small" data-i="'+i+'">Eliminar</button>';
+    div.querySelector('span').textContent = item;
+    div.querySelector('button').addEventListener('click', () => {
+      list.splice(i,1);
+      renderSimpleList(containerId, list);
+    });
+    cont.appendChild(div);
+  });
+}
+
+function setupSimpleListInput(inputId, buttonId, containerId, list){
+  const addItem = () => {
+    const input = $(inputId);
+    const val = input.value.trim();
+    if(!val) return;
+    list.push(val);
+    input.value = '';
+    renderSimpleList(containerId, list);
+  };
+  $(buttonId).addEventListener('click', addItem);
+  $(inputId).addEventListener('keydown', (e) => {
+    if(e.key === 'Enter'){ e.preventDefault(); addItem(); }
+  });
+}
+
+setupSimpleListInput('recurso-input', 'btn-add-recurso', 'recursos-lista', recursos);
+setupSimpleListInput('aula-otro-input', 'btn-add-aula-otro', 'aula-otros-lista', aulaOtros);
+setupSimpleListInput('estrategia-otra-input', 'btn-add-estrategia-otra', 'estrategias-otras-lista', estrategiasOtras);
+
+/* ---------- Tabla de desglose (saber / saber hacer / ser) ---------- */
+function addDesgloseRow(values){
+  values = values || {};
+  desgloseCounter++;
+  const tbody = $('desglose-tbody');
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td>
+      <select class="d-tipo">
+        <option value="Saber">Saber</option>
+        <option value="Saber hacer">Saber hacer</option>
+        <option value="Ser">Ser</option>
+      </select>
+    </td>
+    <td><textarea class="d-contenido" placeholder="Contenido del aprendizaje">${values.contenido || ''}</textarea></td>
+    <td><button class="btn-small" title="Eliminar">✕</button></td>
+  `;
+  tr.querySelector('.d-tipo').value = values.tipo || 'Saber';
+  tr.querySelector('.btn-small').addEventListener('click', () => tr.remove());
+  tbody.appendChild(tr);
+}
+$('btn-add-desglose').addEventListener('click', () => addDesgloseRow());
+
+function getDesgloseData(){
+  const rows = document.querySelectorAll('#desglose-tbody tr');
+  const data = [];
+  rows.forEach(tr => {
+    data.push({
+      tipo: tr.querySelector('.d-tipo').value,
+      contenido: tr.querySelector('.d-contenido').value
+    });
+  });
+  return data;
+}
+
+/* ---------- Tabla de sesiones ---------- */
+function addSesionRow(values){
+  values = values || {};
+  sesionCounter++;
+  const tbody = $('sesiones-tbody');
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td><input type="text" class="s-num" value="${values.numero !== undefined ? values.numero : sesionCounter}"></td>
+    <td>
+      <select class="s-tipo">
+        <option value="Presencial">Presencial</option>
+        <option value="Virtual">Virtual</option>
+      </select>
+    </td>
+    <td>
+      <select class="s-temp">
+        <option value="Sincrónica">Sincrónica</option>
+        <option value="Asincrónica">Asincrónica</option>
+      </select>
+    </td>
+    <td><input type="text" class="s-duracion" placeholder="Ej. 90 min" value="${values.duracion || ''}"></td>
+    <td><textarea class="s-actividades" placeholder="Actividades y estrategias usadas">${values.actividades || ''}</textarea></td>
+    <td>
+      <select class="s-etapa">
+        <option value="Experiencia">Experiencia</option>
+        <option value="Reflexión">Reflexión</option>
+        <option value="Conceptualización">Conceptualización</option>
+        <option value="Aplicación">Aplicación</option>
+      </select>
+    </td>
+    <td><button class="btn-small" title="Eliminar sesión">✕</button></td>
+  `;
+  tr.querySelector('.s-tipo').value = values.tipo || 'Presencial';
+  tr.querySelector('.s-temp').value = values.temporalidad || 'Sincrónica';
+  tr.querySelector('.s-etapa').value = values.etapa || 'Experiencia';
+  tr.querySelector('.btn-small').addEventListener('click', () => tr.remove());
+  tbody.appendChild(tr);
+}
+$('btn-add-sesion').addEventListener('click', () => addSesionRow());
+
+function getSesionesData(){
+  const rows = document.querySelectorAll('#sesiones-tbody tr');
+  const data = [];
+  rows.forEach(tr => {
+    data.push({
+      numero: tr.querySelector('.s-num').value,
+      tipo: tr.querySelector('.s-tipo').value,
+      temporalidad: tr.querySelector('.s-temp').value,
+      duracion: tr.querySelector('.s-duracion').value,
+      actividades: tr.querySelector('.s-actividades').value,
+      etapa: tr.querySelector('.s-etapa').value
+    });
+  });
+  return data;
+}
+
+/* ---------- Recolectar todos los datos ---------- */
+function collectData(){
+  const modalidadInput = document.querySelector('#modalidad-cards input:checked');
+  const estrategias = [];
+  document.querySelectorAll('#estrategias-grid input:checked').forEach(cb => estrategias.push(cb.value));
+
+  return {
+    nombre: $('nombre').value,
+    materia: $('materia').value,
+    tema: $('tema').value,
+    modalidad: modalidadInput ? modalidadInput.value : '',
+    aula: {
+      capacidad: $('aula-capacidad').value,
+      proyector: $('aula-proyector').checked,
+      pantallaTv: $('aula-pantalla-tv').checked,
+      pantallaInteractiva: $('aula-pantalla-interactiva').checked,
+      camara: $('aula-camara').checked,
+      microfono: $('aula-microfono').checked,
+      atril: $('aula-atril').checked,
+      kit: $('aula-kit').checked,
+      internet: $('aula-internet').checked,
+      parlantes: $('aula-parlantes').checked,
+      computadoras: $('aula-computadoras').checked,
+      pizarra: $('aula-pizarra').checked,
+      otros: aulaOtros.slice()
+    },
+    perfil: {
+      edades: $('perfil-edades').value,
+      genero: $('perfil-genero').value,
+      socioeconomico: $('perfil-socioeconomico').value,
+      tecnologia: $('perfil-tecnologia').value,
+      conocimientos: $('perfil-conocimientos').value,
+      personalidad: $('perfil-personalidad').value
+    },
+    recursos: recursos.slice(),
+    bloomNivel: $('bloom-nivel').value,
+    objetivo: $('objetivo').value,
+    desglose: getDesgloseData(),
+    estrategias: estrategias,
+    estrategiasOtras: estrategiasOtras.slice(),
+    sesiones: getSesionesData()
+  };
+}
+
+function applyData(d){
+  if(!d) return;
+  $('nombre').value = d.nombre || '';
+  $('materia').value = d.materia || '';
+  $('tema').value = d.tema || '';
+
+  if(d.modalidad){
+    document.querySelectorAll('#modalidad-cards .radio-card').forEach(c => {
+      const match = c.getAttribute('data-value') === d.modalidad;
+      c.classList.toggle('selected', match);
+      c.querySelector('input').checked = match;
+    });
+  }
+
+  const aula = d.aula || {};
+  $('aula-capacidad').value = aula.capacidad || '';
+  $('aula-proyector').checked = !!aula.proyector;
+  $('aula-pantalla-tv').checked = !!aula.pantallaTv;
+  $('aula-pantalla-interactiva').checked = !!aula.pantallaInteractiva;
+  $('aula-camara').checked = !!aula.camara;
+  $('aula-microfono').checked = !!aula.microfono;
+  $('aula-atril').checked = !!aula.atril;
+  $('aula-kit').checked = !!aula.kit;
+  $('aula-internet').checked = !!aula.internet;
+  $('aula-parlantes').checked = !!aula.parlantes;
+  $('aula-computadoras').checked = !!aula.computadoras;
+  $('aula-pizarra').checked = !!aula.pizarra;
+
+  aulaOtros.length = 0;
+  (aula.otros || []).forEach(item => aulaOtros.push(item));
+  renderSimpleList('aula-otros-lista', aulaOtros);
+
+  const perfil = d.perfil || {};
+  $('perfil-edades').value = perfil.edades || '';
+  $('perfil-genero').value = perfil.genero || '';
+  $('perfil-socioeconomico').value = perfil.socioeconomico || '';
+  $('perfil-tecnologia').value = perfil.tecnologia || '';
+  $('perfil-conocimientos').value = perfil.conocimientos || '';
+  $('perfil-personalidad').value = perfil.personalidad || '';
+
+  recursos.length = 0;
+  (d.recursos || []).forEach(item => recursos.push(item));
+  renderSimpleList('recursos-lista', recursos);
+
+  $('bloom-nivel').value = d.bloomNivel || '';
+  $('objetivo').value = d.objetivo || '';
+
+  $('desglose-tbody').innerHTML = '';
+  desgloseCounter = 0;
+  (d.desglose || []).forEach(item => addDesgloseRow(item));
+
+  document.querySelectorAll('#estrategias-grid input').forEach(cb => {
+    cb.checked = (d.estrategias || []).includes(cb.value);
+  });
+
+  estrategiasOtras.length = 0;
+  (d.estrategiasOtras || []).forEach(item => estrategiasOtras.push(item));
+  renderSimpleList('estrategias-otras-lista', estrategiasOtras);
+
+  $('sesiones-tbody').innerHTML = '';
+  sesionCounter = 0;
+  (d.sesiones || []).forEach(s => addSesionRow(s));
+}
+
+/* ---------- Guardar (descargar JSON) / Cargar (subir JSON) ---------- */
+function saveProgress(){
+  try{
+    const data = collectData();
+    const json = JSON.stringify(data, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const nombreArchivo = (data.materia ? data.materia.replace(/[^a-z0-9]+/gi,'_') : 'diseno_instruccional') + '.json';
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = nombreArchivo;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    $('save-status').textContent = 'Archivo JSON descargado ✓';
+  } catch(err){
+    console.error(err);
+    $('save-status').textContent = 'No se pudo generar el archivo';
+  }
+  setTimeout(() => { $('save-status').textContent = ''; }, 3000);
+}
+
+function loadProgress(){
+  $('file-input').click();
+}
+
+$('file-input').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    try{
+      const data = JSON.parse(ev.target.result);
+      applyData(data);
+      $('save-status').textContent = 'Avance cargado desde ' + file.name + ' ✓';
+    } catch(err){
+      console.error(err);
+      $('save-status').textContent = 'El archivo no es un JSON válido de este formulario';
+    }
+    setTimeout(() => { $('save-status').textContent = ''; }, 3000);
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+});
+
+$('btn-save').addEventListener('click', saveProgress);
+$('btn-load').addEventListener('click', loadProgress);
+let resetArmed = false;
+$('btn-reset').addEventListener('click', () => {
+  if(!resetArmed){
+    resetArmed = true;
+    const original = $('btn-reset').textContent;
+    $('btn-reset').textContent = '¿Seguro? Clic de nuevo para confirmar';
+    setTimeout(() => {
+      resetArmed = false;
+      $('btn-reset').textContent = original;
+    }, 3000);
+    return;
+  }
+  resetArmed = false;
+  $('btn-reset').textContent = 'Empezar de nuevo';
+  applyData({});
+  goToStep(1);
+});
+
+/* ---------- Revisión final ---------- */
+function renderReview(){
+  const d = collectData();
+  const cont = $('review-container');
+  const aulaFeatures = [];
+  if(d.aula.proyector) aulaFeatures.push('Proyector');
+  if(d.aula.pantallaTv) aulaFeatures.push('Pantalla de tele');
+  if(d.aula.pantallaInteractiva) aulaFeatures.push('Pantalla interactiva');
+  if(d.aula.camara) aulaFeatures.push('Cámara');
+  if(d.aula.microfono) aulaFeatures.push('Micrófono de solapa');
+  if(d.aula.atril) aulaFeatures.push('Atril');
+  if(d.aula.kit) aulaFeatures.push('Kit de herramientas');
+  if(d.aula.internet) aulaFeatures.push('Internet');
+  if(d.aula.parlantes) aulaFeatures.push('Parlantes');
+  if(d.aula.computadoras) aulaFeatures.push('Computadoras');
+  if(d.aula.pizarra) aulaFeatures.push('Pizarra');
+
+  cont.innerHTML = `
+    <div class="review-block">
+      <h3>Datos generales</h3>
+      <p><strong>Docente:</strong> ${d.nombre || '—'}</p>
+      <p><strong>Materia:</strong> ${d.materia || '—'}</p>
+      <p><strong>Tema:</strong> ${d.tema || '—'}</p>
+      <p><strong>Modalidad:</strong> ${d.modalidad || '—'}</p>
+    </div>
+    <div class="review-block">
+      <h3>Aula</h3>
+      <p><strong>Capacidad aproximada de estudiantes:</strong> ${d.aula.capacidad || '—'}</p>
+      <p><strong>Características:</strong></p>
+      ${(aulaFeatures.length || d.aula.otros.length) ? '<ul style="margin:0.3rem 0 0; padding-left:1.2rem;">' + [...aulaFeatures, ...d.aula.otros].map(f => '<li>' + f + '</li>').join('') + '</ul>' : '<p>—</p>'}
+    </div>
+    <div class="review-block">
+      <h3>Perfil de estudiantes</h3>
+      <p><strong>Edades:</strong> ${d.perfil.edades || '—'}</p>
+      <p><strong>Género:</strong> ${d.perfil.genero || '—'}</p>
+      <p><strong>Tecnología:</strong> ${d.perfil.tecnologia || '—'}</p>
+    </div>
+    <div class="review-block">
+      <h3>Recursos disponibles</h3>
+      ${d.recursos.length ? '<ul style="margin:0.3rem 0 0; padding-left:1.2rem;">' + d.recursos.map(r => '<li>' + r + '</li>').join('') + '</ul>' : '<p>—</p>'}
+    </div>
+    <div class="review-block">
+      <h3>Objetivo (${d.bloomNivel || 'nivel no indicado'})</h3>
+      <p>${d.objetivo || '—'}</p>
+    </div>
+    <div class="review-block">
+      <h3>Desglose del objetivo</h3>
+      <ul style="margin:0.3rem 0 0; padding-left:1.2rem;">
+        <li>Saber: ${d.desglose.filter(item => item.tipo === 'Saber').length}</li>
+        <li>Saber hacer: ${d.desglose.filter(item => item.tipo === 'Saber hacer').length}</li>
+        <li>Ser: ${d.desglose.filter(item => item.tipo === 'Ser').length}</li>
+      </ul>
+    </div>
+    <div class="review-block">
+      <h3>Estrategias didácticas</h3>
+      ${[...d.estrategias, ...d.estrategiasOtras].filter(Boolean).length ? '<ul style="margin:0.3rem 0 0; padding-left:1.2rem;">' + [...d.estrategias, ...d.estrategiasOtras].filter(Boolean).map(e => '<li>' + e + '</li>').join('') + '</ul>' : '<p>—</p>'}
+    </div>
+    <div class="review-block">
+      <h3>Actividades por etapa del ciclo de aprendizaje</h3>
+      <ul style="margin:0.3rem 0 0; padding-left:1.2rem;">
+        <li>Experiencia: ${d.sesiones.filter(s => s.etapa === 'Experiencia').length}</li>
+        <li>Reflexión: ${d.sesiones.filter(s => s.etapa === 'Reflexión').length}</li>
+        <li>Conceptualización: ${d.sesiones.filter(s => s.etapa === 'Conceptualización').length}</li>
+        <li>Aplicación: ${d.sesiones.filter(s => s.etapa === 'Aplicación').length}</li>
+      </ul>
+    </div>
+  `;
+}
+
+/* ---------- Generación de PDF ---------- */
+const PDF_NAVY = [30, 42, 74];
+const PDF_GOLD = [199, 154, 62];
+const PDF_TEXT = [55, 55, 55];
+const PDF_MUTED = [140, 140, 140];
+const PDF_BORDER = [221, 219, 211];
+const PDF_STRIPE = [246, 245, 241];
+const PDF_MARGIN = 14;
+const PDF_WIDTH = 182;
+
+function drawCoverHeader(doc, d){
+  const pageWidth = doc.internal.pageSize.getWidth();
+  doc.setFillColor(...PDF_NAVY);
+  doc.rect(0, 0, pageWidth, 34, 'F');
+  doc.setFont(undefined, 'bold');
+  doc.setFontSize(19);
+  doc.setTextColor(255, 255, 255);
+  doc.text('Diseño instruccional', PDF_MARGIN, 15);
+  doc.setFont(undefined, 'normal');
+  doc.setFontSize(11);
+  doc.setTextColor(216, 220, 232);
+  const subtitle = (d.materia || 'Materia sin definir') + (d.tema ? ' · ' + d.tema : '');
+  doc.text(subtitle, PDF_MARGIN, 23);
+  doc.setFontSize(9);
+  doc.setTextColor(180, 186, 205);
+  doc.text('Generado el ' + new Date().toLocaleDateString('es-ES'), PDF_MARGIN, 29);
+  doc.setFillColor(...PDF_GOLD);
+  doc.rect(0, 34, pageWidth, 1.2, 'F');
+  return 44;
+}
+
+function addSectionTitle(doc, title, y){
+  if(y > 262){ doc.addPage(); y = 20; }
+  doc.setFillColor(...PDF_GOLD);
+  doc.rect(PDF_MARGIN, y - 3.6, 3, 3, 'F');
+  doc.setFont(undefined, 'bold');
+  doc.setFontSize(12.5);
+  doc.setTextColor(...PDF_NAVY);
+  doc.text(title, PDF_MARGIN + 6, y);
+  y += 4;
+  doc.setDrawColor(...PDF_BORDER);
+  doc.setLineWidth(0.2);
+  doc.line(PDF_MARGIN, y, doc.internal.pageSize.getWidth() - PDF_MARGIN, y);
+  doc.setFont(undefined, 'normal');
+  doc.setFontSize(10);
+  doc.setTextColor(...PDF_TEXT);
+  return y + 6;
+}
+
+function addLabelValue(doc, label, value, y){
+  const text = value || '—';
+  if(y > 280){ doc.addPage(); y = 20; }
+  doc.setFont(undefined, 'bold');
+  doc.setFontSize(10);
+  doc.setTextColor(...PDF_NAVY);
+  const labelStr = label + ': ';
+  const labelWidth = doc.getTextWidth(labelStr);
+  doc.setFont(undefined, 'normal');
+  doc.setTextColor(...PDF_TEXT);
+  const fullLineWidth = doc.getTextWidth(text);
+
+  if(labelWidth + fullLineWidth <= PDF_WIDTH){
+    doc.setFont(undefined, 'bold');
+    doc.setTextColor(...PDF_NAVY);
+    doc.text(labelStr, PDF_MARGIN, y);
+    doc.setFont(undefined, 'normal');
+    doc.setTextColor(...PDF_TEXT);
+    doc.text(text, PDF_MARGIN + labelWidth, y);
+    return y + 7;
+  }
+  doc.setFont(undefined, 'bold');
+  doc.setTextColor(...PDF_NAVY);
+  doc.text(labelStr, PDF_MARGIN, y);
+  y += 5;
+  doc.setFont(undefined, 'normal');
+  doc.setTextColor(...PDF_TEXT);
+  const lines = doc.splitTextToSize(text, PDF_WIDTH);
+  lines.forEach(line => {
+    if(y > 280){ doc.addPage(); y = 20; }
+    doc.text(line, PDF_MARGIN, y);
+    y += 5;
+  });
+  return y + 2;
+}
+
+function addBulletList(doc, items, y){
+  const bulletIndent = 5;
+  const maxWidth = PDF_WIDTH - bulletIndent;
+  doc.setFont(undefined, 'normal');
+  doc.setFontSize(10);
+
+  if(!items || !items.length){
+    if(y > 280){ doc.addPage(); y = 20; }
+    doc.setTextColor(...PDF_MUTED);
+    doc.text('—', PDF_MARGIN, y);
+    return y + 7;
+  }
+
+  items.forEach(item => {
+    const lines = doc.splitTextToSize(item, maxWidth);
+    lines.forEach((line, idx) => {
+      if(y > 280){ doc.addPage(); y = 20; }
+      if(idx === 0){
+        doc.setTextColor(...PDF_GOLD);
+        doc.text('•', PDF_MARGIN, y);
+      }
+      doc.setTextColor(...PDF_TEXT);
+      doc.text(line, PDF_MARGIN + bulletIndent, y);
+      y += 5;
+    });
+  });
+  return y + 2;
+}
+
+function finalizeFooters(doc, materia){
+  const totalPages = doc.internal.getNumberOfPages();
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  for(let i = 1; i <= totalPages; i++){
+    doc.setPage(i);
+    doc.setDrawColor(...PDF_BORDER);
+    doc.setLineWidth(0.2);
+    doc.line(PDF_MARGIN, pageHeight - 14, pageWidth - PDF_MARGIN, pageHeight - 14);
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(8.5);
+    doc.setTextColor(...PDF_MUTED);
+    doc.text(materia || 'Diseño instruccional', PDF_MARGIN, pageHeight - 9);
+    doc.text('Página ' + i + ' de ' + totalPages, pageWidth - PDF_MARGIN, pageHeight - 9, { align: 'right' });
+  }
+}
+
+let lastPdfBlobUrl = null;
+
+function buildPdfDoc(){
+  if(!window.jspdf || !window.jspdf.jsPDF){
+    throw new Error('No se pudo cargar la librería de generación de PDF. Verifica tu conexión a internet e intenta de nuevo.');
+  }
+  const d = collectData();
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+
+  let y = drawCoverHeader(doc, d);
+
+  y = addSectionTitle(doc, '1. Datos generales', y);
+  y = addLabelValue(doc, 'Docente', d.nombre, y);
+  y = addLabelValue(doc, 'Materia', d.materia, y);
+  y = addLabelValue(doc, 'Tema', d.tema, y);
+  y = addLabelValue(doc, 'Modalidad', d.modalidad, y);
+
+  y += 2;
+  y = addSectionTitle(doc, '2. Características del aula', y);
+  const aulaFeatures = [];
+  if(d.aula.proyector) aulaFeatures.push('Proyector');
+  if(d.aula.pantallaTv) aulaFeatures.push('Pantalla de tele');
+  if(d.aula.pantallaInteractiva) aulaFeatures.push('Pantalla interactiva');
+  if(d.aula.camara) aulaFeatures.push('Cámara');
+  if(d.aula.microfono) aulaFeatures.push('Micrófono de solapa');
+  if(d.aula.atril) aulaFeatures.push('Atril');
+  if(d.aula.kit) aulaFeatures.push('Kit de herramientas');
+  if(d.aula.internet) aulaFeatures.push('Internet');
+  if(d.aula.parlantes) aulaFeatures.push('Parlantes');
+  if(d.aula.computadoras) aulaFeatures.push('Computadoras');
+  if(d.aula.pizarra) aulaFeatures.push('Pizarra');
+  y = addLabelValue(doc, 'Capacidad aproximada de estudiantes', d.aula.capacidad, y);
+  if(y > 275){ doc.addPage(); y = 20; }
+  doc.setFont(undefined, 'bold');
+  doc.setFontSize(10);
+  doc.setTextColor(...PDF_NAVY);
+  doc.text('Características:', PDF_MARGIN, y);
+  y += 6;
+  y = addBulletList(doc, [...aulaFeatures, ...d.aula.otros], y);
+
+  y += 2;
+  y = addSectionTitle(doc, '3. Perfil de los estudiantes', y);
+  y = addLabelValue(doc, 'Rango de edades', d.perfil.edades, y);
+  y = addLabelValue(doc, 'Datos de género', d.perfil.genero, y);
+  y = addLabelValue(doc, 'Contexto socioeconómico', d.perfil.socioeconomico, y);
+  y = addLabelValue(doc, 'Grado de acceso a la tecnología', d.perfil.tecnologia, y);
+  y = addLabelValue(doc, 'Conocimientos previos', d.perfil.conocimientos, y);
+  y = addLabelValue(doc, 'Personalidad del grupo', d.perfil.personalidad, y);
+
+  y += 2;
+  y = addSectionTitle(doc, '4. Recursos disponibles', y);
+  y = addBulletList(doc, d.recursos, y);
+
+  y += 2;
+  y = addSectionTitle(doc, '5. Objetivo del tema (Taxonomía de Bloom)', y);
+  y = addLabelValue(doc, 'Nivel', d.bloomNivel, y);
+  y = addLabelValue(doc, 'Objetivo', d.objetivo, y);
+
+  y += 2;
+  y = addSectionTitle(doc, '6. Desglose del objetivo', y);
+  if(y > 250){ doc.addPage(); y = 20; }
+  if(d.desglose.length && typeof doc.autoTable === 'function'){
+    doc.autoTable({
+      startY: y,
+      head: [['Tipo', 'Contenido']],
+      body: d.desglose.map(item => [item.tipo, item.contenido]),
+      styles: { fontSize: 9, cellPadding: 2.4, valign: 'top', lineColor: PDF_BORDER, lineWidth: 0.1, textColor: PDF_TEXT },
+      headStyles: { fillColor: PDF_NAVY, textColor: 255, fontStyle: 'bold' },
+      alternateRowStyles: { fillColor: PDF_STRIPE },
+      margin: { left: PDF_MARGIN, right: PDF_MARGIN },
+      theme: 'grid'
+    });
+    y = doc.lastAutoTable.finalY + 8;
+  } else {
+    y = addBulletList(doc, d.desglose.map(item => item.tipo + ': ' + (item.contenido || '—')), y);
+  }
+
+  y += 2;
+  y = addSectionTitle(doc, '7. Estrategias didácticas', y);
+  y = addBulletList(doc, [...d.estrategias, ...d.estrategiasOtras].filter(Boolean), y);
+
+  if(y > 250){ doc.addPage(); y = 20; }
+  y = addSectionTitle(doc, '8. Cronograma de actividades', y);
+
+  if(d.sesiones.length && typeof doc.autoTable === 'function'){
+    doc.autoTable({
+      startY: y,
+      head: [['Sesión', 'Tipo', 'Temporalidad', 'Duración', 'Actividades / estrategias', 'Etapa del ciclo de aprendizaje']],
+      body: d.sesiones.map(s => [s.numero, s.tipo, s.temporalidad, s.duracion, s.actividades, s.etapa]),
+      styles: { fontSize: 8.5, cellPadding: 2.2, valign: 'top', lineColor: PDF_BORDER, lineWidth: 0.1, textColor: PDF_TEXT },
+      headStyles: { fillColor: PDF_NAVY, textColor: 255, fontStyle: 'bold' },
+      alternateRowStyles: { fillColor: PDF_STRIPE },
+      margin: { left: PDF_MARGIN, right: PDF_MARGIN },
+      theme: 'grid'
+    });
+  } else if(d.sesiones.length){
+    d.sesiones.forEach(s => {
+      y = addLabelValue(doc, 'Sesión ' + s.numero, s.tipo + ' · ' + s.temporalidad + ' · ' + s.duracion + ' · ' + s.etapa, y);
+      y = addLabelValue(doc, 'Actividades', s.actividades, y);
+    });
+  } else {
+    y = addBulletList(doc, [], y);
+  }
+
+  finalizeFooters(doc, d.materia);
+
+  const filename = (d.materia ? d.materia.replace(/[^a-z0-9]+/gi,'_') : 'diseno_instruccional') + '.pdf';
+  return { doc, filename };
+}
+
+function showPdfStatus(message, isError){
+  const el = $('pdf-status');
+  el.style.display = 'block';
+  el.style.background = isError ? '#FBEAF0' : '#EAF3DE';
+  el.style.color = isError ? '#72243E' : '#27500A';
+  el.style.border = '1px solid ' + (isError ? '#ED93B1' : '#97C459');
+  el.innerHTML = message;
+}
+
+$('btn-preview-pdf').addEventListener('click', () => {
+  try{
+    const { doc } = buildPdfDoc();
+    if(lastPdfBlobUrl) URL.revokeObjectURL(lastPdfBlobUrl);
+    lastPdfBlobUrl = doc.output('bloburl');
+    $('pdf-preview-frame').src = lastPdfBlobUrl;
+    $('pdf-modal').style.display = 'flex';
+    showPdfStatus('Vista previa generada correctamente.', false);
+  } catch(err){
+    console.error(err);
+    showPdfStatus('No se pudo generar la vista previa: ' + err.message + '. Si estás viendo este archivo dentro de una vista previa embebida, descárgalo y ábrelo directamente en tu navegador (doble clic sobre el archivo).', true);
+  }
+});
+
+$('btn-close-preview').addEventListener('click', () => {
+  $('pdf-modal').style.display = 'none';
+});
+
+$('btn-download-from-preview').addEventListener('click', () => {
+  try{
+    const { doc, filename } = buildPdfDoc();
+    doc.save(filename);
+    showPdfStatus('PDF descargado como "' + filename + '". Si no ves la descarga, revisa la carpeta de descargas de tu navegador o la barra de notificaciones.', false);
+  } catch(err){
+    console.error(err);
+    showPdfStatus('Ocurrió un error al descargar el PDF: ' + err.message, true);
+  }
+});
+
+$('btn-generate-pdf').addEventListener('click', () => {
+  try{
+    const { doc, filename } = buildPdfDoc();
+    doc.save(filename);
+    showPdfStatus('PDF descargado como "' + filename + '". Si no ves la descarga, revisa la carpeta de descargas de tu navegador o la barra de notificaciones. <br><br>Si sigue sin aparecer, es probable que estés viendo este archivo dentro de una vista previa con restricciones de seguridad: descarga el archivo .html y ábrelo directamente en tu navegador (doble clic).', false);
+  } catch(err){
+    console.error(err);
+    showPdfStatus('Ocurrió un error al generar el PDF: ' + err.message + '. Verifica tu conexión a internet (esta herramienta necesita cargar una librería externa la primera vez) e intenta de nuevo.', true);
+  }
+});
+
+/* ---------- Inicialización ---------- */
+addSesionRow();
+goToStep(1);
+</script>
+
+</body>
+</html>
