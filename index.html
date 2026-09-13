@@ -348,6 +348,9 @@
       <label for="nombre">Nombre completo</label>
       <input type="text" id="nombre" placeholder="Ej. María Fernanda Gutiérrez">
       <p id="nombre-warning" style="display:none; color:var(--danger); font-size:0.85rem; margin-top:0.4rem;">Indica tu nombre completo antes de continuar.</p>
+      <label for="correo">Correo electrónico</label>
+      <input type="text" id="correo" placeholder="Ej. maria.gutierrez@correo.com">
+      <p id="correo-warning" style="display:none; color:var(--danger); font-size:0.85rem; margin-top:0.4rem;">Indica un correo electrónico válido antes de continuar.</p>
     </div>
 
     <!-- STEP 2 -->
@@ -591,13 +594,30 @@ function goToStep(n){
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
+function isValidEmail(value){
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
+}
+
 $('btn-next').addEventListener('click', () => {
-  if(currentStep === 1 && !$('nombre').value.trim()){
-    $('nombre-warning').style.display = 'block';
-    $('nombre').focus();
-    return;
+  if(currentStep === 1){
+    let hasError = false;
+    if(!$('nombre').value.trim()){
+      $('nombre-warning').style.display = 'block';
+      hasError = true;
+    } else {
+      $('nombre-warning').style.display = 'none';
+    }
+    if(!isValidEmail($('correo').value)){
+      $('correo-warning').style.display = 'block';
+      hasError = true;
+    } else {
+      $('correo-warning').style.display = 'none';
+    }
+    if(hasError){
+      (!$('nombre').value.trim() ? $('nombre') : $('correo')).focus();
+      return;
+    }
   }
-  $('nombre-warning').style.display = 'none';
   goToStep(currentStep + 1);
 });
 $('btn-prev').addEventListener('click', () => goToStep(currentStep - 1));
@@ -746,6 +766,7 @@ function collectData(){
 
   return {
     nombre: $('nombre').value,
+    correo: $('correo').value,
     materia: $('materia').value,
     tema: $('tema').value,
     modalidad: modalidadInput ? modalidadInput.value : '',
@@ -785,6 +806,7 @@ function collectData(){
 function applyData(d){
   if(!d) return;
   $('nombre').value = d.nombre || '';
+  $('correo').value = d.correo || '';
   $('materia').value = d.materia || '';
   $('tema').value = d.tema || '';
 
@@ -933,6 +955,7 @@ function renderReview(){
     <div class="review-block">
       <h3>Datos generales</h3>
       <p><strong>Docente:</strong> ${d.nombre || '—'}</p>
+      <p><strong>Correo electrónico:</strong> ${d.correo || '—'}</p>
       <p><strong>Materia:</strong> ${d.materia || '—'}</p>
       <p><strong>Tema:</strong> ${d.tema || '—'}</p>
       <p><strong>Modalidad:</strong> ${d.modalidad || '—'}</p>
@@ -1126,6 +1149,7 @@ function buildPdfDoc(){
 
   y = addSectionTitle(doc, '1. Datos generales', y);
   y = addLabelValue(doc, 'Docente', d.nombre, y);
+  y = addLabelValue(doc, 'Correo electrónico', d.correo, y);
   y = addLabelValue(doc, 'Materia', d.materia, y);
   y = addLabelValue(doc, 'Tema', d.tema, y);
   y = addLabelValue(doc, 'Modalidad', d.modalidad, y);
